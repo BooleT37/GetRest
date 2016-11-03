@@ -1,11 +1,9 @@
 package ru.naumen.controllers;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.Map;
 
-import main.java.ru.naumen.weatherStorage.WeatherStorage;
-import main.java.ru.naumen.weatherStorage.WrongIdException;
+import ru.naumen.weatherStorage.WeatherStorage;
+import ru.naumen.weatherStorage.WrongIdException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

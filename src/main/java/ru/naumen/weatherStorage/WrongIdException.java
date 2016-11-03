@@ -1,4 +1,4 @@
-package main.java.ru.naumen.weatherStorage;
+package ru.naumen.weatherStorage;
 
 public class WrongIdException extends Exception {
     WrongIdException(int id) {

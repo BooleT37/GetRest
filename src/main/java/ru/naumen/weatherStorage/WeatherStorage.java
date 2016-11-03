@@ -1,10 +1,8 @@
-package main.java.ru.naumen.weatherStorage;
+package ru.naumen.weatherStorage;
 
 import ru.naumen.model.WeatherData;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class WeatherStorage {
