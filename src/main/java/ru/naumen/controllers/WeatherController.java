@@ -1,14 +1,20 @@
 package ru.naumen.controllers;
 
-import java.util.Arrays;
 import java.util.List;
 
+import main.java.ru.naumen.weatherStorage.WeatherStorage;
+import main.java.ru.naumen.weatherStorage.WrongIdException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ru.naumen.model.WeatherData;
+import ru.naumen.model.Throwable;
+import sun.net.httpserver.HttpServerImpl;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by dkirpichenkov on 31.10.16.
@@ -23,17 +29,34 @@ import ru.naumen.model.WeatherData;
  * @RequestBody - получение объекта из тела запроса
  */
 @RestController
-public class WeatherController
+class WeatherController
 {
+    private WeatherStorage storage = WeatherStorage.getInstance();
+
     @RequestMapping(value = "/weatherdata", method = RequestMethod.GET)
     public List<WeatherData> getWeather()
     {
-        return Arrays.asList(new WeatherData(0, "30-10-2016", -1), new WeatherData(1, "31-10-2016", -3));
+        return storage.getAll();
     }
 
     @RequestMapping(value = "/weatherdata/{id}", method = RequestMethod.GET)
-    public WeatherData getOneWeather(@PathVariable("id") int id)
+    /*public Throwable<WeatherData> getOneWeather(@PathVariable("id") int id)
     {
-        return new WeatherData(id, "-1", -2 * id);
+        try {
+            WeatherData data = storage.get(id);
+            return new Throwable<>(false, data);
+        } catch (WrongIdException e) {
+            return new Throwable<WeatherData>(false, e.getMessage());
+        }
+    }*/
+
+    public WeatherData getOneWeather(@PathVariable("id") int id, HttpServletResponse response)
+    {
+        try {
+            return storage.get(id);
+        } catch (WrongIdException e) {
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+            return null;
+        }
     }
 }
