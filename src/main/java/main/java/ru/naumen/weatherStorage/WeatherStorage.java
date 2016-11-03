@@ -3,15 +3,17 @@ package main.java.ru.naumen.weatherStorage;
 import ru.naumen.model.WeatherData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WeatherStorage {
     private static WeatherStorage instance;
-    private List<WeatherData> data; //todo rewrite using map
+    private Map<Integer, WeatherData> data;
     private WeatherStorage() {
-        data = new ArrayList<>();
-        data.add(new WeatherData(0, "30-10-2016", -1));
-        data.add(new WeatherData(1, "31-10-2016", -3));
+        data = new HashMap<>();
+        data.put(0, new WeatherData("30-10-2016", -1));
+        data.put(1, new WeatherData("31-10-2016", -3));
     }
     public static WeatherStorage getInstance() {
         if (instance == null)
@@ -19,30 +21,25 @@ public class WeatherStorage {
         return instance;
     }
 
-    public List<WeatherData> getAll() {
+    public Map<Integer, WeatherData> getAll() {
         return data;
     }
 
     public WeatherData get(int id) throws WrongIdException {
-        for (WeatherData item : data) {
-            if (item.getId() == id)
-                return item;
-        }
+        WeatherData item = data.get(id);
+        if (item != null)
+            return item;
         throw new WrongIdException(id);
     }
 
-    public void add(WeatherData item) {
-        data.add(item);
+    public void add(Integer id, WeatherData item) {
+        data.put(id, item);
     }
 
     public void delete(int id) throws WrongIdException {
-        for (WeatherData item : data) {
-            if (item.getId() == id) {
-                data.remove(item);
-                return;
-            }
-        }
-        throw new WrongIdException(id);
+        WeatherData result = data.remove(id);
+        if (result == null)
+            throw new WrongIdException(id);
     }
 
 }

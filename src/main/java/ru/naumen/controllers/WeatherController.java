@@ -1,6 +1,8 @@
 package ru.naumen.controllers;
 
-import java.util.List;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Map;
 
 import main.java.ru.naumen.weatherStorage.WeatherStorage;
 import main.java.ru.naumen.weatherStorage.WrongIdException;
@@ -11,9 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ru.naumen.model.WeatherData;
-import ru.naumen.model.Throwable;
-import sun.net.httpserver.HttpServerImpl;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -34,22 +35,12 @@ class WeatherController
     private WeatherStorage storage = WeatherStorage.getInstance();
 
     @RequestMapping(value = "/weatherdata", method = RequestMethod.GET)
-    public List<WeatherData> getWeather()
+    public Map<Integer, WeatherData> getWeather()
     {
         return storage.getAll();
     }
 
     @RequestMapping(value = "/weatherdata/{id}", method = RequestMethod.GET)
-    /*public Throwable<WeatherData> getOneWeather(@PathVariable("id") int id)
-    {
-        try {
-            WeatherData data = storage.get(id);
-            return new Throwable<>(false, data);
-        } catch (WrongIdException e) {
-            return new Throwable<WeatherData>(false, e.getMessage());
-        }
-    }*/
-
     public WeatherData getOneWeather(@PathVariable("id") int id, HttpServletResponse response)
     {
         try {
@@ -57,6 +48,27 @@ class WeatherController
         } catch (WrongIdException e) {
             response.setStatus(HttpStatus.NOT_FOUND.value());
             return null;
+        }
+    }
+
+    @RequestMapping(value = "/weatherdata/addWeatherData", method = RequestMethod.PUT)
+    public void addWeatherData(HttpServletRequest request)
+    {
+        Map<String, String[]> params = request.getParameterMap();
+        Integer id = Integer.parseInt(params.get("id")[0]);
+        String date = params.get("date")[0];
+        Integer temperature = Integer.parseInt(params.get("temperature")[0]);
+        storage.add(id, new WeatherData(date, temperature));
+    }
+
+    @RequestMapping(value = "/weatherdata/deleteWeatherData", method = RequestMethod.DELETE)
+    public void deleteWeatherData(HttpServletRequest request, HttpServletResponse response)
+    {
+        Integer id = Integer.parseInt(request.getParameter("id"));
+        try {
+            storage.delete(id);
+        } catch (WrongIdException e) {
+            response.setStatus(HttpStatus.NOT_FOUND.value());
         }
     }
 }
