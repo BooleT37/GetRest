@@ -1,7 +1,5 @@
-# GetRest
-Talk about REST architecture and Java Interop
-# Slides
-https://d0k1.github.io/GetRest/#/
+# IoC
+Exercice for Inversion of Control in Spring
 
 # Начало работы
 
