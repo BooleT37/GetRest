@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.naumen</groupId>
-    <artifactId>rest-server</artifactId>
+    <artifactId>ioc</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>rest-server</name>
-    <description>Demo project for Spring Boot</description>
+    <name>ioc</name>
+    <description>Demo project for Inversion of Control</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -34,6 +34,12 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
         </dependency>
 
         <dependency>

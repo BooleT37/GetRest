@@ -1,13 +1,17 @@
 package ru.naumen.model;
 
+import java.io.Serializable;
+
 /**
  * Created by dkirpichenkov on 31.10.16.
  */
-public class WeatherData
+public class WeatherData implements Serializable
 {
     private int id;
     private String date;
     private int temperature;
+
+    public WeatherData() {}
 
     public WeatherData(int id, String date, int temperature)
     {
@@ -44,5 +48,10 @@ public class WeatherData
     public void setTemperature(int temperature)
     {
         this.temperature = temperature;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[id: %s, date: %s, temperature: %s]", id, date, temperature);
     }
 }

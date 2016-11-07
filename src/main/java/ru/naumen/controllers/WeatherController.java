@@ -1,39 +1,43 @@
 package ru.naumen.controllers;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import ru.naumen.model.HashMapStorage;
 import ru.naumen.model.WeatherData;
+
+import java.util.List;
 
 /**
  * Created by dkirpichenkov on 31.10.16.
- *
- * Простой пример REST контрлллера, который будет обрабатывать запросы
- *
- * <b>Важно</b>
- * 
- * @RestController автоматическое преобразование данных из/в JSON. Применение - класс
- * @RequestMapping - указание URL и HTTP метода для обработки. Применение метод/класс
- * @PathVariable - получение данных из url. Применение аргумент метода
- * @RequestBody - получение объекта из тела запроса
  */
 @RestController
-public class WeatherController
-{
+public class WeatherController {
+
+    private HashMapStorage storage = HashMapStorage.getInstance();
+
     @RequestMapping(value = "/weatherdata", method = RequestMethod.GET)
-    public List<WeatherData> getWeather()
-    {
-        return Arrays.asList(new WeatherData(0, "30-10-2016", -1), new WeatherData(1, "31-10-2016", -3));
+    public List<WeatherData> getWeather() {
+        return storage.getAllData();
     }
 
     @RequestMapping(value = "/weatherdata/{id}", method = RequestMethod.GET)
-    public WeatherData getOneWeather(@PathVariable("id") int id)
-    {
-        return new WeatherData(id, "-1", -2 * id);
+    public WeatherData get(@PathVariable("id") int id) {
+        return storage.get(id);
+    }
+
+    @RequestMapping(value = "/weatherdata", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity create(@RequestBody WeatherData data) {
+        storage.add(data);
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/weatherdata/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity delete(@PathVariable("id") int id) {
+        if (storage.get(id) != null) {
+            storage.remove(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }
