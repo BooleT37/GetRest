@@ -1,11 +1,13 @@
-# IoC
+﻿# IoC
 Exercice for Inversion of Control in Spring
+
+Презенитация: https://ykalemi.github.io/imkn/di
 
 # Начало работы
 
 Для начала работы требуется:
 
-* загрузить репозитарий
+* загрузить репозиторий
 * загрузить браузер Chrome
 * загрузить Postman - плагин для Chrome
 * установить JDK 8
